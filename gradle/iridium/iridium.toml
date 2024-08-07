@@ -13,7 +13,7 @@ modules = [ ]
 modDescription = "Template Mod Description"
 # Modmenu badges, values can be: [ library, deprecated ]
 badges = [ ]
-disableKotlin = false
+disableKotlin = true
 
 [mappings]
     # You have 7 mapping types
