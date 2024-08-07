@@ -1,12 +1,12 @@
 projectTitle = "Team Voided Template"
-modId = "template"
-githubRepo = "Teamvoided/TeamVoidedTemplateMod"
+modId = "transition"
+githubRepo = "Teamvoided/Transition"
 discordServerInviteId = "KZ5Q364hEg"
-authors = [ "WiredTomato", "TheEnderCore" ]
+authors = [ "MincraftEnistein", "TheEnderCore" ]
 majorMinecraftVersion = "1.21"
 minecraftVersion = "1.21"
 fabricLoaderVersion = "0.16.0"
-fabricApiVersion = "0.101.2+1.21"
+fabricApiVersion = "0.102.0+1.21"
 fabricLangKotlinVersion = "1.12.0+kotlin.2.0.10"
 license = "MIT"
 modules = [ ]
