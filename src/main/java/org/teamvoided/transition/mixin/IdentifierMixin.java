@@ -26,9 +26,9 @@ public class IdentifierMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(String namespace2, String path2, CallbackInfo ci) {
 //        Identifier identifier = RemappingRegistryImpl.remap(namespace2, path2);
-        if (identifier != null) {
+//        if (identifier != null) {
 //            path =;
 //            namespace =;
-        }
+//        }
     }
 }
