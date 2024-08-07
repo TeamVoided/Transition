@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -38,15 +37,19 @@ public class Transition implements ModInitializer {
             }
         });
 
-        File gameDir = FabricLoader.getInstance().getGameDir().resolve("cache").toFile();
+        File gameDir = FabricLoader.getInstance().getGameDir().resolve("cache.json").toFile();
+
         try {
-            JsonObject json = JsonHelper.deserialize(GSON, new BufferedReader(new InputStreamReader(gameDir.toURI().toURL().openStream(), StandardCharsets.UTF_8)), JsonObject.class);
+            if (gameDir.exists()) {
+                JsonObject json = JsonHelper.deserialize(GSON, new BufferedReader(new InputStreamReader(gameDir.toURI().toURL().openStream(), StandardCharsets.UTF_8)), JsonObject.class);
 
-            Optional<List<ModData>> decodedList = CODEC.parse(JsonOps.INSTANCE, json)
-                    .resultOrPartial(error -> System.out.println("Failed to decode file"));
-            List<ModData> data = decodedList.orElse(new ArrayList<>());
+                Optional<List<ModData>> decodedList = CODEC.parse(JsonOps.INSTANCE, json)
+                        .resultOrPartial(error -> System.out.println("Failed to decode file"));
+                List<ModData> data = decodedList.orElse(new ArrayList<>());
 
-            data.forEach(System.out::println);
+                data.forEach(System.out::println);
+            }
+
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -54,6 +57,7 @@ public class Transition implements ModInitializer {
     }
 
     private record ModData(String modId, String version) {
+
         private static final Codec<ModData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.STRING.fieldOf("mod_id").forGetter(ModData::modId),
                 Codec.STRING.fieldOf("version").forGetter(ModData::version)
