@@ -28,7 +28,7 @@ repositories {
 println("Task: " + gradle.startParameter.taskNames.joinToString(","))
 
 modSettings {
-    entrypoint("main", "org.teamvoided.transition.Template::init")
+    entrypoint("main", "org.teamvoided.transition.Transition")
     mixinFile("${modId()}.mixins.json")
 
 //    accessWidener("${modId()}.accesswidener")
