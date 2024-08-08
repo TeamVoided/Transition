@@ -16,20 +16,23 @@ public class Transition implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("Transition");
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
+    public static boolean IS_ACTIVE = false;
+
     @Override
     public void onInitialize() {
+        MappingManager.mappingTester();
         CacheManager.readCache();
         FabricLoader.getInstance().getAllMods().forEach((mod) -> {
             ModMetadata metadata = mod.getMetadata();
             if (metadata.containsCustomValue("remapping")) {
                 boolean enabled = metadata.getCustomValue("remapping").getAsBoolean();
-                if (enabled) MappingManager.loadModMappings(mod);
-
+                if (enabled) {
+                    CacheManager.updateCache(mod);
+                    MappingManager.loadModMappings(mod);
+                }
             }
-            CacheManager.updateCache(mod);
         });
-
         CacheManager.writeCache();
-        System.exit(0);
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) System.exit(0);
     }
 }
