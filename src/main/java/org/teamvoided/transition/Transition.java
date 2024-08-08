@@ -2,17 +2,13 @@ package org.teamvoided.transition;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.teamvoided.transition.mappings.MappingManager;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class Transition implements ModInitializer {
@@ -27,10 +23,8 @@ public class Transition implements ModInitializer {
             ModMetadata metadata = mod.getMetadata();
             if (metadata.containsCustomValue("remapping")) {
                 boolean enabled = metadata.getCustomValue("remapping").getAsBoolean();
+                if (enabled) MappingManager.loadModMappings(mod);
 
-                if (enabled) {
-                    // TODO
-                }
             }
             CacheManager.updateCache(mod);
         });
