@@ -27,7 +27,12 @@ public class Transition implements ModInitializer {
             ModMetadata metadata = mod.getMetadata();
             if (metadata.containsCustomValue("remapping")) {
                 boolean enabled = metadata.getCustomValue("remapping").getAsBoolean();
+
+                if (enabled) {
+                    // TODO
+                }
             }
+            CacheManager.updateCache(mod);
         });
 
         CacheManager.writeCache();
