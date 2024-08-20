@@ -21,25 +21,27 @@ public interface MappingManager {
     Map<String, Mappings> ACTIVE_MAPPINGS = new HashMap<>();
 
     static void loadModMappings(ModContainer mod) {
+        var metadata = mod.getMetadata();
         mod.findPath("mappings.json").ifPresent((path) -> {
             var file = path.toFile();
             if (file.exists()) {
                 try {
                     JsonObject json = JsonHelper.deserialize(GSON, Files.readString(path), JsonObject.class);
-
                     Mappings.CODEC.parse(JsonOps.INSTANCE, json)
                             .resultOrPartial(LOGGER::error)
-                            .ifPresent((mapping) -> ACTIVE_MAPPINGS.put(mod.getMetadata().getId(), mapping));
+                            .ifPresent((mapping) -> ACTIVE_MAPPINGS.put(metadata.getId(), mapping));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            } else {
+                LOGGER.error("Mod has mappings Enabled, But no mappings.json found for mod \"{}\"!", metadata.getId());
             }
         });
     }
 
     static void mappingTester() {
         try {
-            Path filePath = FabricLoader.getInstance().getGameDir().resolve("not_cache.json");
+            Path filePath = FabricLoader.getInstance().getGameDir().resolve("mapping_test_file.json");
             var t = new Mappings(
                     List.of("yello", "2_6"),
                     Map.of("test_block", "tset_b", "tes", "test")

@@ -5,10 +5,8 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.Util;
 import org.teamvoided.transition.api.misc.MapCodecs;
 
 import java.io.*;
@@ -26,15 +24,13 @@ public interface CacheManager {
     File CACHE_FILE = FabricLoader.getInstance().getGameDir().resolve("data").resolve("transition_cache").toFile();
 
     Codec<Map<String, String>> CODEC = MapCodecs.codec(Codec.pair(
-                    Codec.STRING.fieldOf("id").codec(),
-                    Codec.STRING.fieldOf("version").codec()
-            )
-    );
+            Codec.STRING.fieldOf("id").codec(),
+            Codec.STRING.fieldOf("version").codec()
+    ));
 
-    Map<String, String> CACHED_MODS = Util.make(new HashMap<>(), map -> map.put("test_mod", "test"));
+    Map<String, String> CACHED_MODS = new HashMap<>();//Util.make(new HashMap<>(), map -> map.put("test_mod", "test"));
 
-    static void updateCache(ModContainer mod) {
-        ModMetadata metadata = mod.getMetadata();
+    static void updateCache(ModMetadata metadata) {
         String modId = metadata.getId();
 
         if (CACHED_MODS.containsKey(modId)) {
@@ -72,7 +68,6 @@ public interface CacheManager {
     static void writeCache() {
         try {
             Files.deleteIfExists(CACHE_FILE.toPath());
-
             JsonElement element = CODEC.encodeStart(JsonOps.INSTANCE, CACHED_MODS).getOrThrow();
             Files.writeString(CACHE_FILE.toPath(), GSON.toJson(element), StandardCharsets.UTF_8);
         } catch (IOException e) {

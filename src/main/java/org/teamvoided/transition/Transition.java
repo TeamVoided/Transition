@@ -13,26 +13,27 @@ import org.teamvoided.transition.mappings.MappingManager;
 @SuppressWarnings("unused")
 public class Transition implements ModInitializer {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger("Transition");
+    public static final String MODID = "transition";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static boolean IS_ACTIVE = false;
 
     @Override
     public void onInitialize() {
-        MappingManager.mappingTester();
         CacheManager.readCache();
         FabricLoader.getInstance().getAllMods().forEach((mod) -> {
             ModMetadata metadata = mod.getMetadata();
             if (metadata.containsCustomValue("remapping")) {
                 boolean enabled = metadata.getCustomValue("remapping").getAsBoolean();
                 if (enabled) {
-                    CacheManager.updateCache(mod);
+                    CacheManager.updateCache(metadata);
                     MappingManager.loadModMappings(mod);
                 }
             }
         });
         CacheManager.writeCache();
-        if (FabricLoader.getInstance().isDevelopmentEnvironment()) System.exit(0);
+        MappingManager.mappingTester();
+//        if (FabricLoader.getInstance().isDevelopmentEnvironment()) System.exit(0);
     }
 }
