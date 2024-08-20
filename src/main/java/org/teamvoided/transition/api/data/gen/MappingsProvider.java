@@ -2,9 +2,10 @@ package org.teamvoided.transition.api.data.gen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
-import net.minecraft.data.DataPackOutput;
-import net.minecraft.registry.HolderLookup;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.teamvoided.transition.mappings.Mappings;
 
 import java.util.HashMap;
@@ -16,21 +17,21 @@ import java.util.function.BiConsumer;
 public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings> {
 
     protected MappingsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(dataOutput, registriesFuture, DataPackOutput.Type.RESOURCE_PACK, "", Mappings.CODEC);
+        super(dataOutput, registriesFuture, PackOutput.Target.RESOURCE_PACK, "", Mappings.CODEC);
     }
 
     @Override
-    protected void configure(BiConsumer<Identifier, Mappings> provider, HolderLookup.Provider lookup) {
+    protected void configure(BiConsumer<ResourceLocation, Mappings> provider, HolderLookup.Provider lookup) {
         var builder = new MappingBuilder();
         makeMappings(lookup, builder);
-        provider.accept(Identifier.of("transitions", "mappings"), builder.build());
+        provider.accept(ResourceLocation.fromNamespaceAndPath("transitions", "mappings"), builder.build());
 
     }
 
     abstract void makeMappings(HolderLookup.Provider lookup, MappingBuilder builder);
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "transitions:mappings";
     }
 
@@ -43,11 +44,11 @@ public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings>
             oldNamespaces.add(from);
         }
 
-        void addOldPathMapping(Identifier to, String from) {
+        void addOldPathMapping(ResourceLocation to, String from) {
             oldToNewPaths.put(from, to.toString());
         }
 
-        void addOldPathMappings(Identifier to, String... from) {
+        void addOldPathMappings(ResourceLocation to, String... from) {
             for (String s : from) {
                 addOldPathMapping(to, s);
             }

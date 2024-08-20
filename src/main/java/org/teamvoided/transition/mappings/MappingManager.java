@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.util.GsonHelper;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +26,7 @@ public interface MappingManager {
             var file = path.toFile();
             if (file.exists()) {
                 try {
-                    JsonObject json = JsonHelper.deserialize(GSON, Files.readString(path), JsonObject.class);
+                    JsonObject json = GsonHelper.fromJson(GSON, Files.readString(path), JsonObject.class);
                     Mappings.CODEC.parse(JsonOps.INSTANCE, json)
                             .resultOrPartial(LOGGER::error)
                             .ifPresent((mapping) -> ACTIVE_MAPPINGS.put(metadata.getId(), mapping));

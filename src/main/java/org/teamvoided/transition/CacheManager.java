@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.util.GsonHelper;
 import org.teamvoided.transition.api.misc.MapCodecs;
 
 import java.io.*;
@@ -53,7 +53,7 @@ public interface CacheManager {
     static void readCache() {
         if (CACHE_FILE.exists()) {
             try (Reader reader = new BufferedReader(new InputStreamReader(CACHE_FILE.toURI().toURL().openStream(), StandardCharsets.UTF_8))) {
-                JsonArray json = JsonHelper.deserialize(GSON, reader, JsonArray.class);
+                JsonArray json = GsonHelper.fromJson(GSON, reader, JsonArray.class);
 
                 CACHED_MODS.clear();
                 CODEC.parse(JsonOps.INSTANCE, json)

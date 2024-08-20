@@ -1,6 +1,6 @@
 package org.teamvoided.transition.mixin;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -13,7 +13,7 @@ import org.teamvoided.transition.mappings.MappingManager;
 
 import java.util.Map;
 
-@Mixin(Identifier.class)
+@Mixin(ResourceLocation.class)
 public class IdentifierMixin {
 
     @Mutable
