@@ -15,8 +15,7 @@ import java.util.function.BiConsumer;
 
 @SuppressWarnings("unused")
 public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings> {
-
-    protected MappingsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    MappingsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(dataOutput, registriesFuture, PackOutput.Target.RESOURCE_PACK, "", Mappings.CODEC);
     }
 
@@ -28,7 +27,7 @@ public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings>
 
     }
 
-    abstract void makeMappings(HolderLookup.Provider lookup, MappingBuilder builder);
+    public abstract void makeMappings(HolderLookup.Provider lookup, MappingBuilder builder);
 
     @Override
     public @NotNull String getName() {
@@ -40,21 +39,21 @@ public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings>
         private final HashSet<String> oldNamespaces = new HashSet<>();
         private final HashMap<String, String> oldToNewPaths = new HashMap<>();
 
-        void addOldNamespace(String from) {
+        public void addOldNamespace(String from) {
             oldNamespaces.add(from);
         }
 
-        void addOldPathMapping(ResourceLocation to, String from) {
+        public void addOldPathMapping(ResourceLocation to, String from) {
             oldToNewPaths.put(from, to.toString());
         }
 
-        void addOldPathMappings(ResourceLocation to, String... from) {
+        public void addOldPathMappings(ResourceLocation to, String... from) {
             for (String s : from) {
                 addOldPathMapping(to, s);
             }
         }
 
-        Mappings build() {
+        public Mappings build() {
             return new Mappings(oldNamespaces.stream().toList(), oldToNewPaths);
         }
     }
