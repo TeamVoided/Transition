@@ -15,7 +15,7 @@ import java.util.function.BiConsumer;
 
 @SuppressWarnings("unused")
 public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings> {
-    MappingsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public MappingsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(dataOutput, registriesFuture, PackOutput.Target.RESOURCE_PACK, "", Mappings.CODEC);
     }
 
@@ -43,11 +43,11 @@ public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings>
             oldNamespaces.add(from);
         }
 
-        public void addOldPathMapping(ResourceLocation to, String from) {
-            oldToNewPaths.put(from, to.toString());
+        public void addOldPathMapping(String to, String from) {
+            oldToNewPaths.put(from, to);
         }
 
-        public void addOldPathMappings(ResourceLocation to, String... from) {
+        public void addOldPathMappings(String to, String... from) {
             for (String s : from) {
                 addOldPathMapping(to, s);
             }

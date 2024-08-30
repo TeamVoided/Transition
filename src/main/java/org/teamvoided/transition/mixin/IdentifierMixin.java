@@ -11,8 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.teamvoided.transition.Transition;
 import org.teamvoided.transition.mappings.MappingManager;
 
-import java.util.Map;
-
 @Mixin(ResourceLocation.class)
 public class IdentifierMixin {
 
@@ -30,20 +28,27 @@ public class IdentifierMixin {
     private void init(String oldNamespace, String oldPath, CallbackInfo ci) {
         if (Transition.IS_ACTIVE) {
             MappingManager.ACTIVE_MAPPINGS.forEach((currentNamespace, mapping) -> {
-                for (String namespace : mapping.oldNamespaces()) {
-                    if (namespace.equals(oldNamespace)) {
-                        this.namespace = currentNamespace;
-                        break;
-                    }
+
+                if (!oldNamespace.equals(currentNamespace) && mapping.oldNamespaces().contains(oldNamespace)) {
+                    this.namespace = currentNamespace;
+                   /* for (String namespace : mapping.oldNamespaces()) {
+                        if (namespace.equals(oldNamespace)) {
+                            break;
+                        }
+                    }*/
                 }
-                if (namespace.equals(currentNamespace)) {
-                    for (Map.Entry<String, String> entry : mapping.oldToNewPaths().entrySet()) {
+
+                if (namespace.equals(currentNamespace) && mapping.oldToNewPaths().containsKey(oldPath)) {
+                    this.path = mapping.oldToNewPaths().get(oldPath);
+                    /*for (Map.Entry<String, String> entry : mapping.oldToNewPaths().entrySet()) {
                         if (oldPath.equals(entry.getKey())) {
                             this.path = entry.getValue();
                             break;
                         }
-                    }
+                    }*/
+
                 }
+
             });
         }
     }
