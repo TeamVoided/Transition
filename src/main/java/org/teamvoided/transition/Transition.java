@@ -27,13 +27,13 @@ public class Transition implements ModInitializer {
             if (metadata.containsCustomValue("remapping")) {
                 boolean enabled = metadata.getCustomValue("remapping").getAsBoolean();
                 if (enabled) {
+                    LOGGER.info("Mod \"{}\" has remapping enabled", metadata.getId());
                     CacheManager.updateCache(metadata);
                     MappingManager.loadModMappings(mod);
                 }
             }
         });
         CacheManager.writeCache();
-        MappingManager.mappingTester();
 //        if (FabricLoader.getInstance().isDevelopmentEnvironment()) System.exit(0);
     }
 }

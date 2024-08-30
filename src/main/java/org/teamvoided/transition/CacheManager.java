@@ -28,7 +28,7 @@ public interface CacheManager {
             Codec.STRING.fieldOf("version").codec()
     ));
 
-    Map<String, String> CACHED_MODS = new HashMap<>();//Util.make(new HashMap<>(), map -> map.put("test_mod", "test"));
+    Map<String, String> CACHED_MODS = new HashMap<>();
 
     static void updateCache(ModMetadata metadata) {
         String modId = metadata.getId();

@@ -2,16 +2,12 @@ package org.teamvoided.transition.mappings;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.util.GsonHelper;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.teamvoided.transition.Transition.GSON;
@@ -22,7 +18,7 @@ public interface MappingManager {
 
     static void loadModMappings(ModContainer mod) {
         var metadata = mod.getMetadata();
-        mod.findPath("mappings.json").ifPresent((path) -> {
+        mod.findPath("assets/transition/mappings.json").ifPresent((path) -> {
             var file = path.toFile();
             if (file.exists()) {
                 try {
@@ -38,18 +34,4 @@ public interface MappingManager {
             }
         });
     }
-
-    static void mappingTester() {
-        try {
-            Path filePath = FabricLoader.getInstance().getGameDir().resolve("mapping_test_file.json");
-            var t = new Mappings(
-                    List.of("yello", "2_6"),
-                    Map.of("test_block", "tset_b", "tes", "test")
-            );
-            Files.writeString(filePath, GSON.toJson(Mappings.CODEC.encodeStart(JsonOps.INSTANCE, t).getOrThrow()), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }
