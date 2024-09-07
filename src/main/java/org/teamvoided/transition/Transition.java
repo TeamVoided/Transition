@@ -29,7 +29,7 @@ public class Transition implements ModInitializer {
                 if (enabled) {
                     LOGGER.info("Mod \"{}\" has remapping enabled", metadata.getId());
                     CacheManager.updateCache(metadata);
-                    MappingManager.loadModMappings(mod);
+                    MappingManager.loadModMappings(mod, metadata.getId());
                 }
             }
         });

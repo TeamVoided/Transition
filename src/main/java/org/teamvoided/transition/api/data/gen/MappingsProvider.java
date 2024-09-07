@@ -6,6 +6,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.teamvoided.transition.CacheManager;
+import org.teamvoided.transition.Transition;
 import org.teamvoided.transition.mappings.Mappings;
 
 import java.util.HashMap;
@@ -23,8 +25,7 @@ public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings>
     protected void configure(BiConsumer<ResourceLocation, Mappings> provider, HolderLookup.Provider lookup) {
         var builder = new MappingBuilder();
         makeMappings(lookup, builder);
-        provider.accept(ResourceLocation.fromNamespaceAndPath("transitions", "mappings"), builder.build());
-
+        provider.accept(ResourceLocation.fromNamespaceAndPath(Transition.MODID, "mappings"), builder.build());
     }
 
     public abstract void makeMappings(HolderLookup.Provider lookup, MappingBuilder builder);
