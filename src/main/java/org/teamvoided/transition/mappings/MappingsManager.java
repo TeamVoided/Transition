@@ -17,7 +17,7 @@ import java.util.Map;
 import static org.teamvoided.transition.Transition.GSON;
 import static org.teamvoided.transition.Transition.LOGGER;
 
-public interface MappingManager {
+public interface MappingsManager {
 
     Map<String, Mappings> ACTIVE_MAPPINGS = new HashMap<>();
 

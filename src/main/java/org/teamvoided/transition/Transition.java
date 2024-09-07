@@ -7,7 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.teamvoided.transition.mappings.MappingManager;
+import org.teamvoided.transition.mappings.MappingsManager;
 
 
 @SuppressWarnings("unused")
@@ -29,7 +29,7 @@ public class Transition implements ModInitializer {
                 if (enabled) {
                     LOGGER.info("Mod \"{}\" has remapping enabled", metadata.getId());
                     CacheManager.updateCache(metadata);
-                    MappingManager.loadModMappings(mod, metadata.getId());
+                    MappingsManager.loadModMappings(mod, metadata.getId());
                 }
             }
         });
