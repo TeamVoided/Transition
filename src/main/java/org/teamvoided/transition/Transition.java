@@ -5,12 +5,18 @@ import com.google.gson.GsonBuilder;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.storage.LevelResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.teamvoided.transition.mappings.MappingModes;
 import org.teamvoided.transition.mappings.MappingsManager;
+
+import static org.teamvoided.transition.ServerProcessor.processDirectory;
+
 
 @SuppressWarnings("unused")
 public class Transition implements ModInitializer, DedicatedServerModInitializer {
@@ -24,14 +30,24 @@ public class Transition implements ModInitializer, DedicatedServerModInitializer
 
     @Override
     public void onInitialize() {
+        LOGGER.info("Initializing main");
         loadMod();
     }
-
 
     @Override
     public void onInitializeServer() {
+        LOGGER.info("Initializing server");
         loadMod();
+        ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
     }
+
+    public void onServerStarting(MinecraftServer server) {
+        var worldFile = server.getWorldPath(LevelResource.ROOT).toFile();
+        LOGGER.info("Server world worldFile: {}", worldFile);
+        processDirectory(worldFile);
+        server.close();
+    }
+
 
     public static void loadMod() {
         if (CONFIG.mode == MappingModes.OFF) {
