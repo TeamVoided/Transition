@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
+import static net.minecraft.world.level.chunk.storage.RegionFileStorage.ANVIL_EXTENSION;
 import static org.teamvoided.transition.Transition.LOGGER;
 
 public interface ServerProcessor {
@@ -20,7 +21,7 @@ public interface ServerProcessor {
             else {
                 var name = file.getName();
                 if (name.endsWith(".dat")/*|| name.endsWith(".dat_old")*/) processDatFile(file);
-                else if (name.endsWith(".mca")) processMcaFile(file);
+                else if (name.endsWith(ANVIL_EXTENSION)) processMcaFile(file);
             }
         }
     }
@@ -41,6 +42,10 @@ public interface ServerProcessor {
         } catch (IOException e) {
             LOGGER.error("Failed to read datFile: {}", datFile, e);
         }
+    }
+
+    static void processMcaFile(File file) {
+        LOGGER.info("Processing mca datFile: {}", file);
     }
 
     static CompoundTag processCompoundTag(CompoundTag tag) {
@@ -130,7 +135,4 @@ public interface ServerProcessor {
         return null;
     }
 
-    static void processMcaFile(File file) {
-        LOGGER.info("Processing mca datFile: {}", file);
-    }
 }
