@@ -1,6 +1,5 @@
 package org.teamvoided.transition.mappings;
 
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.teamvoided.transition.api.misc.MapCodecs;
@@ -12,10 +11,10 @@ public record Mappings(List<String> oldNamespaces, Map<String, String> oldToNewP
 
     public static final Codec<Mappings> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(
-                    Codec.STRING.listOf().fieldOf("oldNamespaces").forGetter(Mappings::oldNamespaces),
+                    Codec.STRING.listOf().optionalFieldOf("oldNamespaces", List.of()).forGetter(Mappings::oldNamespaces),
                     MapCodecs.codec(
                             Codec.pair(Codec.STRING.fieldOf("old").codec(), Codec.STRING.fieldOf("new").codec())
-                    ).fieldOf("oldToNewPaths").forGetter(Mappings::oldToNewPaths)
+                    ).optionalFieldOf("oldToNewPaths", Map.of()).forGetter(Mappings::oldToNewPaths)
             )
             .apply(instance, Mappings::new)
     );
