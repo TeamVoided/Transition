@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.teamvoided.transition.mappings.MappingModes;
 import org.teamvoided.transition.Transition;
 import org.teamvoided.transition.mappings.MappingsManager;
 
@@ -27,6 +28,10 @@ public class IdentifierMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(String oldNamespace, String oldPath, CallbackInfo ci) {
         if (Transition.IS_ACTIVE) {
+            if (Transition.CONFIG.mode != MappingModes.CONTINUOUS && Transition.CONFIG.mode != MappingModes.BOTH) {
+                return;
+            }
+
             MappingsManager.ACTIVE_MAPPINGS.forEach((currentNamespace, mapping) -> {
 
                 if (!oldNamespace.equals(currentNamespace) && mapping.oldNamespaces().contains(oldNamespace)) {

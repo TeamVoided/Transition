@@ -1,0 +1,8 @@
+{
+  "transition.main": "Transition Config",
+  "transition.main.mode": "Mode",
+  "transition.main.mode.OFF": "Off",
+  "transition.main.mode.ON_LOAD": "On Load",
+  "transition.main.mode.CONTINUOUS": "Continuous",
+  "transition.main.mode.BOTH": "Both"
+}

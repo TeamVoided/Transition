@@ -6,11 +6,13 @@ iridium = "3.3.2"
 #farrow = "1.0.0+arrow.1.2.4"
 modmenu = "11.0.1"
 emi = "1.1.10+1.21"
+fzzyconfig = "0.5.0+1.21"
 
 [libraries]
 #farrow = { module = "net.wiredtomato:farrow", version.ref = "farrow" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 emi = { module = "dev.emi:emi-fabric", version.ref = "emi" }
+fzzyconfig = { module = "me.fzzyhmstrs:fzzy_config", version.ref = "fzzyconfig" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

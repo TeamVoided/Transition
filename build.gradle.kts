@@ -22,6 +22,7 @@ val curse_id: String? by project
 repositories {
     maven("https://teamvoided.org/releases")
     maven("https://maven.terraformersmc.com/") { name = "Terraformers" }
+    maven("https://maven.fzzyhmstrs.me/") { name = "FzzyMaven" }
     mavenCentral()
 }
 
@@ -37,6 +38,7 @@ modSettings {
 dependencies {
     modImplementation(fileTree("libs"))
     modImplementation(libs.modmenu)
+    modImplementation(libs.fzzyconfig)
 
     modCompileOnly("${libs.emi.get()}:api")
     modLocalRuntime(libs.emi)
