@@ -45,6 +45,7 @@ public class Transition implements ModInitializer, DedicatedServerModInitializer
         var worldFile = server.getWorldPath(LevelResource.ROOT).toFile();
         LOGGER.info("Server world worldFile: {}", worldFile);
         processDirectory(worldFile);
+
         server.close();
     }
 
