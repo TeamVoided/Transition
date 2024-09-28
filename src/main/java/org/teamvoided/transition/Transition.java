@@ -3,6 +3,7 @@ package org.teamvoided.transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
+import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
@@ -12,7 +13,7 @@ import org.teamvoided.transition.mappings.MappingModes;
 import org.teamvoided.transition.mappings.MappingsManager;
 
 @SuppressWarnings("unused")
-public class Transition implements ModInitializer {
+public class Transition implements ModInitializer, DedicatedServerModInitializer {
 
     public static final String MODID = "transition";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
@@ -23,6 +24,16 @@ public class Transition implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        loadMod();
+    }
+
+
+    @Override
+    public void onInitializeServer() {
+        loadMod();
+    }
+
+    public static void loadMod() {
         if (CONFIG.mode == MappingModes.OFF) {
             return;
         }
@@ -40,6 +51,5 @@ public class Transition implements ModInitializer {
             }
         });
         CacheManager.writeCache();
-//        if (FabricLoader.getInstance().isDevelopmentEnvironment()) System.exit(0);
     }
 }
