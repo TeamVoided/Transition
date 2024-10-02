@@ -3,7 +3,7 @@ package org.teamvoided.transition;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
-import org.teamvoided.transition.mappings.MappingManager;
+import org.teamvoided.transition.mappings.MappingsManager;
 import org.teamvoided.transition.utils.RegionFileIO;
 
 import java.io.File;
@@ -134,7 +134,7 @@ public interface ServerProcessor {
             if (id != null) {
                 var namespace = new String[]{id.getNamespace()};
                 var path = new String[]{id.getPath()};
-                MappingManager.ACTIVE_MAPPINGS.forEach((currentNamespace, mapping) -> {
+                MappingsManager.ACTIVE_MAPPINGS.forEach((currentNamespace, mapping) -> {
                     if (!id.getNamespace().equals(currentNamespace) && mapping.oldNamespaces().contains(id.getNamespace())) {
                         namespace[0] = currentNamespace;
                     }

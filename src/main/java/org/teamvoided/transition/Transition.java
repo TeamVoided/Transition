@@ -19,7 +19,7 @@ import static org.teamvoided.transition.ServerProcessor.processDirectory;
 
 
 @SuppressWarnings("unused")
-public class Transition implements ModInitializer, DedicatedServerModInitializer {
+public class Transition implements ModInitializer {
 
     public static final String MODID = "transition";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
@@ -32,23 +32,18 @@ public class Transition implements ModInitializer, DedicatedServerModInitializer
     public void onInitialize() {
         LOGGER.info("Initializing main");
         loadMod();
-    }
-
-    @Override
-    public void onInitializeServer() {
-        LOGGER.info("Initializing server");
-        loadMod();
         ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
     }
 
     public void onServerStarting(MinecraftServer server) {
-        var worldFile = server.getWorldPath(LevelResource.ROOT).toFile();
-        LOGGER.info("Server world worldFile: {}", worldFile);
-        processDirectory(worldFile);
+        if (CONFIG.mode == MappingModes.ON_LOAD || CONFIG.mode == MappingModes.BOTH) {
+            var worldFile = server.getWorldPath(LevelResource.ROOT).toFile();
+            LOGGER.info("Server world worldFile: {}", worldFile);
+            processDirectory(worldFile);
 
-        server.close();
+            server.close();
+        }
     }
-
 
     public static void loadMod() {
         if (CONFIG.mode == MappingModes.OFF) {
