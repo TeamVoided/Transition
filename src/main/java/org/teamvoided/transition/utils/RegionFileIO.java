@@ -6,32 +6,50 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
 
-interface RegionFileIO {
+public interface RegionFileIO {
+    RegionStorageInfo fakeData = new RegionStorageInfo("", Level.OVERWORLD, "");
+
     static RegionFile getRegionFile(Path file) throws IOException {
-        RegionFile regionFile2 = new RegionFile(new RegionStorageInfo("", Level.OVERWORLD, ""), file, file.getParent(), false);
-        return regionFile2;
+        return new RegionFile(fakeData, file, file.getParent(), false);
     }
 
-    @Nullable
-    static CompoundTag read(File file) throws IOException {
+    static HashMap<ChunkPos, CompoundTag> read(File file) throws IOException {
         RegionFile regionFile = getRegionFile(file.toPath());
-        DataInputStream dataInputStream = regionFile.getChunkDataInputStream(new ChunkPos(0, 0));
 
+        // r.0.0.mca
+        var cordArray = file.getName().split("\\.");
+
+        var x = Integer.parseInt(cordArray[1]);
+        var z = Integer.parseInt(cordArray[2]);
+
+        var map = new HashMap<ChunkPos, CompoundTag>();
+        for (int i = x; i < 16; i++) {
+            for (int j = z; j < 16; j++) {
+                var chunkPos = new ChunkPos(x * i, z * j);
+                if (regionFile.doesChunkExist(chunkPos)) map.put(chunkPos, read(regionFile, chunkPos));
+            }
+        }
+        return map;
+
+    }
+
+    static CompoundTag read(RegionFile regionFile, ChunkPos chunkPos) throws IOException {
+        DataInputStream dataInputStream = regionFile.getChunkDataInputStream(chunkPos);
         CompoundTag tag;
-        label43:
+        funny:
         {
             try {
                 if (dataInputStream == null) {
                     tag = null;
-                    break label43;
+                    break funny;
                 }
 
                 tag = NbtIo.read(dataInputStream);
@@ -53,6 +71,10 @@ interface RegionFileIO {
         }
 
         return tag;
+    }
+
+    static void write(File file, ChunkPos chunkPos, CompoundTag compoundTag) throws IOException {
+        write(getRegionFile(file.toPath()), chunkPos, compoundTag);
     }
 
     static void write(RegionFile regionFile, ChunkPos chunkPos, CompoundTag compoundTag) throws IOException {

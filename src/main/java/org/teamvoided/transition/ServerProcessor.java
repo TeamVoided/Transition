@@ -1,8 +1,10 @@
 package org.teamvoided.transition;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
 import org.teamvoided.transition.mappings.MappingManager;
+import org.teamvoided.transition.utils.RegionFileIO;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,15 +31,12 @@ public interface ServerProcessor {
 
     static void processDatFile(File datFile) {
         try {
-            LOGGER.info("Processing dat datFile: {}", datFile);
+            LOGGER.info("Processing .dat File: {}", datFile);
             var tag = NbtIo.readCompressed(datFile.toPath(), NbtAccounter.unlimitedHeap());
-            LOGGER.info("Dat file: {}", tag);
             var newTag = processCompoundTag(tag);
             if (newTag != null) {
-                LOGGER.info("\n\n\n");
-                LOGGER.info("Writing dat datFile: {}", newTag);
-                LOGGER.info("\n\n\n");
-//                NbtIo.writeCompressed(newTag, datFile.toPath());
+                LOGGER.info("Updating .dat File: {}", datFile);
+                NbtIo.writeCompressed(newTag, datFile.toPath());
             }
         } catch (IOException e) {
             LOGGER.error("Failed to read datFile: {}", datFile, e);
@@ -45,7 +44,24 @@ public interface ServerProcessor {
     }
 
     static void processMcaFile(File file) {
-        LOGGER.info("Processing mca datFile: {}", file);
+        LOGGER.info("Processing .mca File: {}", file);
+        try {
+            var x = RegionFileIO.read(file);
+            x.forEach((chunkPos, chunkNbt) -> {
+                var newTag = processCompoundTag(chunkNbt);
+                if (newTag != null) {
+                    LOGGER.info("Updating .mca File, ChunkPos: {}", chunkPos);
+                    try {
+                        RegionFileIO.write(file, chunkPos, newTag);
+                    } catch (IOException e) {
+                        LOGGER.error("Failed to write mcaFile[{}], ChunkPos[{}]: {}", file, chunkPos, e);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.error("Failed to read mcaFile[{}]: {}", file, e);
+        }
+
     }
 
     static CompoundTag processCompoundTag(CompoundTag tag) {
@@ -127,7 +143,7 @@ public interface ServerProcessor {
                     }
                 });
                 var newId = ResourceLocation.fromNamespaceAndPath(namespace[0], path[0]);
-                LOGGER.info("Old id: {}, New id: {}", id, newId);
+                if(FabricLoader.getInstance().isDevelopmentEnvironment()) LOGGER.info("Old id: {}, New id: {}", id, newId);
 
                 return id == newId ? newId.toString() : null;
             }
