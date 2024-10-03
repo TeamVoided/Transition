@@ -21,6 +21,8 @@ import static org.teamvoided.transition.ServerProcessor.processDirectory;
 public class Transition implements ModInitializer {
 
     public static final String MODID = "transition";
+    public static final String MINECRAFT = "minecraft";
+
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static final TransitionConfig CONFIG = ConfigApiJava.registerAndLoadConfig(TransitionConfig::new);
@@ -39,17 +41,11 @@ public class Transition implements ModInitializer {
             var worldFile = server.getWorldPath(LevelResource.ROOT).toFile();
             log("Server world worldFile: %s".formatted(worldFile));
             processDirectory(worldFile);
-
             log("Finished processing directory");
-
-            if (CONFIG.mode == MappingModes.ON_LOAD) {
-//                CONFIG.mode = MappingModes.OFF;
-//                CONFIG.save();
-
-                log("Disabling OnLoad mode");
-                server.getPlayerList().removeAll();
-                server.stopServer();
-            }
+           /* if (CONFIG.mode == MappingModes.ON_LOAD) {
+                CONFIG.mode = MappingModes.OFF;
+                CONFIG.save();
+            }*/
         }
     }
 

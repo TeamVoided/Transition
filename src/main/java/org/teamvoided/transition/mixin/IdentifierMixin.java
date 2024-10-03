@@ -12,6 +12,8 @@ import org.teamvoided.transition.Transition;
 import org.teamvoided.transition.mappings.MappingModes;
 import org.teamvoided.transition.mappings.MappingsManager;
 
+import static org.teamvoided.transition.Transition.MINECRAFT;
+
 @Mixin(ResourceLocation.class)
 public class IdentifierMixin {
 
@@ -27,7 +29,7 @@ public class IdentifierMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(String oldNamespace, String oldPath, CallbackInfo ci) {
-        if (Transition.IS_ACTIVE) {
+        if (Transition.IS_ACTIVE && !oldNamespace.equals(MINECRAFT)) {
             if (Transition.CONFIG.mode != MappingModes.CONTINUOUS) {
                 return;
             }
