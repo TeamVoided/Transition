@@ -65,10 +65,16 @@ public interface CacheManager {
     }
 
     static void writeCache() {
+        var path = CACHE_FILE.toPath();
         try {
-            Files.deleteIfExists(CACHE_FILE.toPath());
+            if (Files.exists(path)) {
+                Files.deleteIfExists(CACHE_FILE.toPath());
+            } else {
+                Files.createDirectories(path);
+            }
+
             JsonElement element = CODEC.encodeStart(JsonOps.INSTANCE, CACHED_MODS).getOrThrow();
-            Files.writeString(CACHE_FILE.toPath(), GSON.toJson(element), StandardCharsets.UTF_8);
+            Files.writeString(path, GSON.toJson(element), StandardCharsets.UTF_8);
         } catch (IOException e) {
             LOGGER.error("Failed to write cache file", e);
         }
