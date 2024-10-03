@@ -7,8 +7,7 @@ import org.teamvoided.transition.Transition;
 public enum MappingModes implements EnumTranslatable {
     OFF,
     ON_LOAD,
-    CONTINUOUS,
-    BOTH;
+    CONTINUOUS;
 
     @NotNull
     @Override

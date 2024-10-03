@@ -3,7 +3,6 @@ package org.teamvoided.transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
-import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -36,12 +35,20 @@ public class Transition implements ModInitializer {
     }
 
     public void onServerStarting(MinecraftServer server) {
-        if (CONFIG.mode == MappingModes.ON_LOAD || CONFIG.mode == MappingModes.BOTH) {
+        if (CONFIG.mode == MappingModes.ON_LOAD) {
             var worldFile = server.getWorldPath(LevelResource.ROOT).toFile();
             LOGGER.info("Server world worldFile: {}", worldFile);
             processDirectory(worldFile);
 
-            server.close();
+            LOGGER.info("Finished processing directory");
+
+            if (CONFIG.mode == MappingModes.ON_LOAD) {
+                CONFIG.mode = MappingModes.OFF;
+                CONFIG.save();
+
+                LOGGER.info("Disabling OnLoad mode");
+                System.exit(0);
+            }
         }
     }
 
