@@ -29,7 +29,7 @@ public class Transition implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Initializing main");
+        log("Transitioning Transition!");
         loadMod();
         ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
     }
@@ -37,16 +37,16 @@ public class Transition implements ModInitializer {
     public void onServerStarting(MinecraftServer server) {
         if (CONFIG.mode == MappingModes.ON_LOAD) {
             var worldFile = server.getWorldPath(LevelResource.ROOT).toFile();
-            LOGGER.info("Server world worldFile: {}", worldFile);
+            log("Server world worldFile: %s".formatted(worldFile));
             processDirectory(worldFile);
 
-            LOGGER.info("Finished processing directory");
+            log("Finished processing directory");
 
             if (CONFIG.mode == MappingModes.ON_LOAD) {
-                CONFIG.mode = MappingModes.OFF;
-                CONFIG.save();
+//                CONFIG.mode = MappingModes.OFF;
+//                CONFIG.save();
 
-                LOGGER.info("Disabling OnLoad mode");
+                log("Disabling OnLoad mode");
                 server.getPlayerList().removeAll();
                 server.stopServer();
             }
@@ -64,12 +64,16 @@ public class Transition implements ModInitializer {
             if (metadata.containsCustomValue("remapping")) {
                 boolean enabled = metadata.getCustomValue("remapping").getAsBoolean();
                 if (enabled) {
-                    LOGGER.info("Mod \"{}\" has remapping enabled", metadata.getId());
+                    log("Mod \"%s\" has remapping enabled".formatted(metadata.getId()));
                     CacheManager.updateCache(metadata);
                     MappingsManager.loadModMappings(mod, metadata.getId());
                 }
             }
         });
         CacheManager.writeCache();
+    }
+
+    public static void log(String message) {
+        LOGGER.info("(Transition) {}", message);
     }
 }

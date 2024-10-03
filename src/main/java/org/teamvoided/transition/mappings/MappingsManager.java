@@ -14,8 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.teamvoided.transition.Transition.GSON;
-import static org.teamvoided.transition.Transition.LOGGER;
+import static org.teamvoided.transition.Transition.*;
 
 public interface MappingsManager {
 
@@ -29,9 +28,8 @@ public interface MappingsManager {
                 Mappings.CODEC.parse(JsonOps.INSTANCE, json)
                         .resultOrPartial(LOGGER::error)
                         .ifPresent((mapping) -> ACTIVE_MAPPINGS.put(metadata.getId(), mapping));
-                LOGGER.info("Loaded mappings for: {}", modId);
-            }
-            catch (IOException e) {
+                log("Loaded mappings for: %s".formatted(modId));
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }, () -> LOGGER.error("Failed to find mappings file for: {}", modId));

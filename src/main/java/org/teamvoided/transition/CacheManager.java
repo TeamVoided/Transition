@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.teamvoided.transition.Transition.GSON;
-import static org.teamvoided.transition.Transition.LOGGER;
+import static org.teamvoided.transition.Transition.*;
 
 public interface CacheManager {
 
@@ -37,7 +36,7 @@ public interface CacheManager {
             String version = CACHED_MODS.get(modId);
             String newVersion = metadata.getVersion().getFriendlyString();
             if (!version.equals(newVersion)) {
-                LOGGER.info("{} -> {}", version, newVersion);
+                log("%s -> %s".formatted(version, newVersion));
                 Transition.IS_ACTIVE = true;
                 CACHED_MODS.put(modId, newVersion);
             }

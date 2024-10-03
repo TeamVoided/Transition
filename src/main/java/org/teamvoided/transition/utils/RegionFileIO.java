@@ -21,6 +21,8 @@ public interface RegionFileIO {
         return new RegionFile(fakeData, file, file.getParent(), false);
     }
 
+    int REGION_CHUNKS = 32;
+
     static HashMap<ChunkPos, CompoundTag> read(File file) throws IOException {
         RegionFile regionFile = getRegionFile(file.toPath());
 
@@ -31,9 +33,9 @@ public interface RegionFileIO {
         var z = Integer.parseInt(cordArray[2]);
 
         var map = new HashMap<ChunkPos, CompoundTag>();
-        for (int i = x; i < 16; i++) {
-            for (int j = z; j < 16; j++) {
-                var chunkPos = new ChunkPos(x * i, z * j);
+        for (int i = 0; i < REGION_CHUNKS; i++) {
+            for (int j = 0; j < REGION_CHUNKS; j++) {
+                var chunkPos = new ChunkPos((x * REGION_CHUNKS) + i, (z * REGION_CHUNKS) + j);
                 if (regionFile.doesChunkExist(chunkPos)) map.put(chunkPos, read(regionFile, chunkPos));
             }
         }

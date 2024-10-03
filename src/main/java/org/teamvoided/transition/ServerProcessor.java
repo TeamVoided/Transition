@@ -1,6 +1,5 @@
 package org.teamvoided.transition;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
 import org.teamvoided.transition.mappings.MappingsManager;
@@ -13,10 +12,12 @@ import java.util.function.BiConsumer;
 
 import static net.minecraft.world.level.chunk.storage.RegionFileStorage.ANVIL_EXTENSION;
 import static org.teamvoided.transition.Transition.LOGGER;
+import static org.teamvoided.transition.Transition.log;
 
 public interface ServerProcessor {
+    String MINECRAFT = "minecraft";
     static void processDirectory(File directory) {
-        LOGGER.info("Processing directory: {}", directory);
+        log("Processing directory: %s".formatted(directory.getName()));
         if (!directory.isDirectory()) throw new IllegalArgumentException("Not a directory");
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             if (file.isDirectory()) processDirectory(file);
@@ -31,11 +32,11 @@ public interface ServerProcessor {
 
     static void processDatFile(File datFile) {
         try {
-            LOGGER.info("Processing .dat File: {}", datFile);
+            log("Processing .dat File: %s".formatted(datFile.getName()));
             var tag = NbtIo.readCompressed(datFile.toPath(), NbtAccounter.unlimitedHeap());
             var newTag = processCompoundTag(tag);
             if (newTag != null) {
-                LOGGER.info("Updating .dat File: {}", datFile);
+                log("Updating .dat File: %s".formatted(datFile));
                 NbtIo.writeCompressed(newTag, datFile.toPath());
             }
         } catch (IOException e) {
@@ -44,13 +45,13 @@ public interface ServerProcessor {
     }
 
     static void processMcaFile(File file) {
-        LOGGER.info("Processing .mca File: {}", file);
+        log("Processing .mca File: %s".formatted(file.getName()));
         try {
             var x = RegionFileIO.read(file);
             x.forEach((chunkPos, chunkNbt) -> {
                 var newTag = processCompoundTag(chunkNbt);
                 if (newTag != null) {
-                    LOGGER.info("Updating .mca File, ChunkPos: {}", chunkPos);
+                    log("Updating .mca File, ChunkPos: %s".formatted(chunkPos));
                     try {
                         RegionFileIO.write(file, chunkPos, newTag);
                     } catch (IOException e) {
@@ -133,6 +134,8 @@ public interface ServerProcessor {
             var id = ResourceLocation.tryParse(input);
             if (id != null) {
                 var namespace = new String[]{id.getNamespace()};
+                if (namespace[0].equals(MINECRAFT)) return null;
+
                 var path = new String[]{id.getPath()};
                 MappingsManager.ACTIVE_MAPPINGS.forEach((currentNamespace, mapping) -> {
                     if (!id.getNamespace().equals(currentNamespace) && mapping.oldNamespaces().contains(id.getNamespace())) {
@@ -143,9 +146,9 @@ public interface ServerProcessor {
                     }
                 });
                 var newId = ResourceLocation.fromNamespaceAndPath(namespace[0], path[0]);
-                if(FabricLoader.getInstance().isDevelopmentEnvironment()) LOGGER.info("Old id: {}, New id: {}", id, newId);
+                if (!id.equals(newId)) log("Old id: %s, New id: %s".formatted(id, newId));
 
-                return id == newId ? newId.toString() : null;
+                return id != newId ? newId.toString() : null;
             }
         }
         return null;
