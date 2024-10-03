@@ -70,4 +70,8 @@ public class Transition implements ModInitializer {
     public static void log(String message) {
         LOGGER.info("(Transition) {}", message);
     }
+
+    public static void error(String message) {
+        LOGGER.error("(Transition) {}", message);
+    }
 }

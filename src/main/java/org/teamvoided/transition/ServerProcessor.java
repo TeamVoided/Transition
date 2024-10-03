@@ -8,6 +8,7 @@ import org.teamvoided.transition.utils.RegionFileIO;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
@@ -40,27 +41,29 @@ public interface ServerProcessor {
                 NbtIo.writeCompressed(newTag, datFile.toPath());
             }
         } catch (IOException e) {
-            LOGGER.error("!  |- Failed to read datFile: {}", datFile, e);
+            error("!  |- Failed to read .dat File %s: %s".formatted(datFile, e));
         }
     }
 
     static void processMcaFile(File file) {
         log(" |- Processing .mca File: %s".formatted(file.getName()));
         try {
+            var processedChunks = new ArrayList<>();
             var chunkData = RegionFileIO.read(file);
             chunkData.forEach((chunkPos, chunkNbt) -> {
                 var newTag = processCompoundTag(chunkNbt);
                 if (newTag != null) {
-                    log("   |- Updating ChunkPos: %s".formatted(chunkPos));
                     try {
                         RegionFileIO.write(file, chunkPos, newTag);
+                        processedChunks.add(chunkPos);
                     } catch (IOException e) {
-                        LOGGER.error("!  |- Failed to write ChunkPos[{}]: {}", chunkPos, e);
+                        error("!  |- Failed to write ChunkPos[%s]: %s".formatted(chunkPos, e));
                     }
                 }
             });
+            log("   |- Updating ChunkPos: %s".formatted(processedChunks));
         } catch (IOException e) {
-            LOGGER.error("!  |- Failed to read Fil! {}", file, e);
+            error("!  |- Failed to read File %s: %s".formatted(file, e));
         }
 
     }
