@@ -6,8 +6,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,11 +14,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-import static org.teamvoided.transition.Transition.LOGGER;
-import static org.teamvoided.transition.Transition.log;
-
 public interface RegionFileIO {
     RegionStorageInfo fakeData = new RegionStorageInfo("", Level.OVERWORLD, "");
+
     static RegionFile getRegionFile(Path file) throws IOException {
         return new RegionFile(fakeData, file, file.getParent(), false);
     }
@@ -37,7 +33,6 @@ public interface RegionFileIO {
         var z = Integer.parseInt(cordArray[2]);
 
         var map = new HashMap<ChunkPos, CompoundTag>();
-                LOGGER.error("REGION FILE READER IS STILL WRONG!!!");
         for (int i = 0; i < REGION_CHUNKS; i++) {
             for (int j = 0; j < REGION_CHUNKS; j++) {
                 var chunkPos = new ChunkPos((x * REGION_CHUNKS) + i, (z * REGION_CHUNKS) + j);
