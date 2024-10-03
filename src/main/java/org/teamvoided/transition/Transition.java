@@ -47,7 +47,8 @@ public class Transition implements ModInitializer {
                 CONFIG.save();
 
                 LOGGER.info("Disabling OnLoad mode");
-                System.exit(0);
+                server.getPlayerList().removeAll();
+                server.stopServer();
             }
         }
     }
