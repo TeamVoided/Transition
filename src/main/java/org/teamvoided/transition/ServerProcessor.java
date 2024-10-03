@@ -12,18 +12,18 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import static net.minecraft.world.level.chunk.storage.RegionFileStorage.ANVIL_EXTENSION;
-import static org.teamvoided.transition.Transition.LOGGER;
-import static org.teamvoided.transition.Transition.log;
+import static org.teamvoided.transition.Transition.*;
 
 public interface ServerProcessor {
+
     static void processDirectory(File directory) {
         log("Processing directory: %s".formatted(directory.getName()));
         if (!directory.isDirectory()) throw new IllegalArgumentException("Not a directory");
         for (File file : Objects.requireNonNull(directory.listFiles())) {
-            if (file.isDirectory()) processDirectory(file);
+            if (file.isDirectory() && !CONFIG.directoryBlackList.contains(file.getName())) processDirectory(file);
             else {
                 var name = file.getName();
-                if (name.endsWith(".dat")/*|| name.endsWith(".dat_old")*/) processDatFile(file);
+                if (name.endsWith(".dat") || name.endsWith(".dat_old")) processDatFile(file);
                 else if (name.endsWith(ANVIL_EXTENSION)) processMcaFile(file);
             }
         }
@@ -47,8 +47,8 @@ public interface ServerProcessor {
     static void processMcaFile(File file) {
         log(" |- Processing .mca File: %s".formatted(file.getName()));
         try {
-            var x = RegionFileIO.read(file);
-            x.forEach((chunkPos, chunkNbt) -> {
+            var chunkData = RegionFileIO.read(file);
+            chunkData.forEach((chunkPos, chunkNbt) -> {
                 var newTag = processCompoundTag(chunkNbt);
                 if (newTag != null) {
                     log("   |- Updating ChunkPos: %s".formatted(chunkPos));

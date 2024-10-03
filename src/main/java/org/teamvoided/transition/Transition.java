@@ -42,10 +42,8 @@ public class Transition implements ModInitializer {
             log("Server world worldFile: %s".formatted(worldFile));
             processDirectory(worldFile);
             log("Finished processing directory");
-           /* if (CONFIG.mode == MappingModes.ON_LOAD) {
-                CONFIG.mode = MappingModes.OFF;
-                CONFIG.save();
-            }*/
+
+            server.stopServer();
         }
     }
 
