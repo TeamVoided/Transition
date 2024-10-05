@@ -30,6 +30,7 @@ public interface CacheManager {
     Map<String, String> CACHED_MODS = new HashMap<>();
 
     static void updateCache(ModMetadata metadata) {
+        /*
         String modId = metadata.getId();
 
         if (CACHED_MODS.containsKey(modId)) {
@@ -47,9 +48,11 @@ public interface CacheManager {
                 CACHED_MODS.put(modId, metadata.getVersion().getFriendlyString());
             }
         }
+         */
     }
 
     static void readCache() {
+        /*
         if (CACHE_FILE.exists()) {
             try (Reader reader = new BufferedReader(new InputStreamReader(CACHE_FILE.toURI().toURL().openStream(), StandardCharsets.UTF_8))) {
                 JsonArray json = GsonHelper.fromJson(GSON, reader, JsonArray.class);
@@ -62,9 +65,11 @@ public interface CacheManager {
                 LOGGER.error("Failed to read cache file", e);
             }
         }
+         */
     }
 
     static void writeCache() {
+        /*
         var path = CACHE_FILE.toPath();
         try {
             if (Files.exists(path)) {
@@ -78,5 +83,6 @@ public interface CacheManager {
         } catch (IOException e) {
             LOGGER.error("Failed to write cache file", e);
         }
+         */
     }
 }

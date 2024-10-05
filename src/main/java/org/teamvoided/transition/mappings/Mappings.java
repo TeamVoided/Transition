@@ -7,14 +7,11 @@ import org.teamvoided.transition.api.misc.MapCodecs;
 import java.util.List;
 import java.util.Map;
 
-public record Mappings(List<String> oldNamespaces, Map<String, String> oldToNewPaths) {
+public record Mappings(Map<String, Map<String, String>> mappings) {
 
     public static final Codec<Mappings> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(
-                    Codec.STRING.listOf().optionalFieldOf("oldNamespaces", List.of()).forGetter(Mappings::oldNamespaces),
-                    MapCodecs.codec(
-                            Codec.pair(Codec.STRING.fieldOf("old").codec(), Codec.STRING.fieldOf("new").codec())
-                    ).optionalFieldOf("oldToNewPaths", Map.of()).forGetter(Mappings::oldToNewPaths)
+                    Codec.unboundedMap(Codec.STRING, Codec.unboundedMap(Codec.STRING, Codec.STRING)).fieldOf("mappings").forGetter(Mappings::mappings)
             )
             .apply(instance, Mappings::new)
     );
