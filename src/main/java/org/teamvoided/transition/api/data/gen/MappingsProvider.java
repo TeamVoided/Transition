@@ -12,14 +12,13 @@ import org.teamvoided.transition.mappings.Mappings;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 @SuppressWarnings("unused")
 public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings> {
     public MappingsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(dataOutput, registriesFuture, PackOutput.Target.DATA_PACK, "", Mappings.CODEC);
+        super(dataOutput, registriesFuture, PackOutput.Target.RESOURCE_PACK, "", Mappings.CODEC);
     }
 
     @Override
@@ -38,35 +37,25 @@ public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings>
 
     @SuppressWarnings("unused")
     public static class MappingBuilder {
-        private final Map<String, Map<String, String>> mappings = new HashMap<>();
+        private final HashSet<String> oldNamespaces = new HashSet<>();
+        private final HashMap<String, String> oldToNewPaths = new HashMap<>();
 
-        public NamespaceBuilder namespace(String namespace) {
-            return new NamespaceBuilder(this, namespace);
+        public void addOldNamespace(String from) {
+            oldNamespaces.add(from);
+        }
+
+        public void addOldPathMapping(String to, String from) {
+            oldToNewPaths.put(from, to);
+        }
+
+        public void addOldPathMappings(String to, String... from) {
+            for (String s : from) {
+                addOldPathMapping(to, s);
+            }
         }
 
         public Mappings build() {
-            return new Mappings(mappings);
-        }
-
-        public static class NamespaceBuilder {
-            final String namespace;
-            private final MappingBuilder parent;
-            private final Map<String, String> namespaceMappings = new HashMap<>();
-
-            NamespaceBuilder(MappingBuilder parent, String namespace) {
-                this.parent = parent;
-                this.namespace = namespace;
-            }
-
-            public NamespaceBuilder addPathMapping(String from, String to) {
-                namespaceMappings.put(from, to);
-                return this;
-            }
-
-            public MappingBuilder build() {
-                parent.mappings.put(namespace, namespaceMappings);
-                return parent;
-            }
+            return new Mappings(oldNamespaces.stream().toList(), oldToNewPaths);
         }
     }
 }

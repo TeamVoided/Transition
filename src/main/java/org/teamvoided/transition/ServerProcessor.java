@@ -136,13 +136,19 @@ public interface ServerProcessor {
         if (input.contains(":")) {
             var id = ResourceLocation.tryParse(input);
             if (id != null) {
-                if (id.getNamespace().equals("minecraft")) return null;
+                var namespace = new String[]{id.getNamespace()};
+                if (namespace[0].equals(Transition.MINECRAFT)) return null;
 
-                var mappings = MappingsManager.ACTIVE_MAPPINGS.get(id.getNamespace());
-                var newNamespace = mappings.getFirst().getMetadata().getId();
-                var newPath = mappings.getSecond().mappings().get(id.getNamespace()).get(id.getPath());
-                var newId = ResourceLocation.fromNamespaceAndPath(newNamespace, newPath == null ? id.getPath() : newPath);
-
+                var path = new String[]{id.getPath()};
+                MappingsManager.ACTIVE_MAPPINGS.forEach((currentNamespace, mapping) -> {
+                    if (!id.getNamespace().equals(currentNamespace) && mapping.oldNamespaces().contains(id.getNamespace())) {
+                        namespace[0] = currentNamespace;
+                    }
+                    if (namespace[0].equals(currentNamespace) && mapping.oldToNewPaths().containsKey(id.getPath())) {
+                        path[0] = mapping.oldToNewPaths().get(id.getPath());
+                    }
+                });
+                var newId = ResourceLocation.fromNamespaceAndPath(namespace[0], path[0]);
                 if (FabricLoader.getInstance().isDevelopmentEnvironment() && !id.equals(newId))
                     log("    |- Old id: %s, New id: %s".formatted(id, newId));
 

@@ -12,7 +12,6 @@ import org.teamvoided.transition.Transition;
 import org.teamvoided.transition.mappings.MappingModes;
 import org.teamvoided.transition.mappings.MappingsManager;
 
-import static org.teamvoided.transition.Transition.LOGGER;
 import static org.teamvoided.transition.Transition.MINECRAFT;
 
 @Mixin(ResourceLocation.class)
@@ -35,13 +34,16 @@ public class IdentifierMixin {
                 return;
             }
 
-            var mappings = MappingsManager.ACTIVE_MAPPINGS.get(oldNamespace);
-            var newNamespace = mappings.getFirst().getMetadata().getId();
-            var newPath = mappings.getSecond().mappings().get(oldNamespace).get(oldPath);
-            this.namespace = newNamespace;
-            if (newPath != null) this.path = newPath;
+            MappingsManager.ACTIVE_MAPPINGS.forEach((currentNamespace, mapping) -> {
 
-            LOGGER.info("Changed id to {}:{}", newNamespace, newPath);
+                if (!oldNamespace.equals(currentNamespace) && mapping.oldNamespaces().contains(oldNamespace)) {
+                    this.namespace = currentNamespace;
+                }
+
+                if (namespace.equals(currentNamespace) && mapping.oldToNewPaths().containsKey(oldPath)) {
+                    this.path = mapping.oldToNewPaths().get(oldPath);
+                }
+            });
         }
     }
 }
