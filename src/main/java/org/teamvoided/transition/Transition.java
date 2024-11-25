@@ -55,14 +55,14 @@ public class Transition implements ModInitializer {
         CacheManager.readCache();
         FabricLoader.getInstance().getAllMods().forEach((mod) -> {
             ModMetadata metadata = mod.getMetadata();
-            if (metadata.containsCustomValue("remapping")) {
+/*            if (metadata.containsCustomValue("remapping")) {
                 boolean enabled = metadata.getCustomValue("remapping").getAsBoolean();
                 if (enabled) {
-                    log("Mod \"%s\" has remapping enabled".formatted(metadata.getId()));
-                    CacheManager.updateCache(metadata);
-                    MappingsManager.loadModMappings(mod, metadata.getId());
-                }
-            }
+                    log("Mod \"%s\" has remapping enabled".formatted(metadata.getId()));*/
+            CacheManager.updateCache(metadata);
+            MappingsManager.loadModMappings(mod, metadata.getId());
+            /*    }
+            }*/
         });
         CacheManager.writeCache();
     }
