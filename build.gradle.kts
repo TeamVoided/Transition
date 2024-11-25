@@ -16,8 +16,8 @@ group = property("maven_group")!!
 version = property("mod_version")!!
 base.archivesName.set(modSettings.modId())
 
-val modrinth_id: String? by project
-val curse_id: String? by project
+//val modrinth_id: String? by project
+//val curse_id: String? by project
 
 repositories {
     maven("https://teamvoided.org/releases")
@@ -98,6 +98,7 @@ publishScript {
     publishSources(true)
 }
 
+/*
 uploadConfig {
 //    debugMode = true
     modrinthId = modrinth_id
@@ -110,3 +111,4 @@ uploadConfig {
     modrinthDependency("Ha28R6CL", uploadConfig.REQUIRED)
     curseDependency("fabric-language-kotlin", uploadConfig.REQUIRED)
 }
+*/

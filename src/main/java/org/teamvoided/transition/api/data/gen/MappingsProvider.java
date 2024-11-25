@@ -6,7 +6,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.teamvoided.transition.CacheManager;
 import org.teamvoided.transition.Transition;
 import org.teamvoided.transition.mappings.Mappings;
 
@@ -18,7 +17,7 @@ import java.util.function.BiConsumer;
 @SuppressWarnings("unused")
 public abstract class MappingsProvider extends FabricCodecDataProvider<Mappings> {
     public MappingsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(dataOutput, registriesFuture, PackOutput.Target.RESOURCE_PACK, "", Mappings.CODEC);
+        super(dataOutput, registriesFuture, PackOutput.Target.DATA_PACK, "", Mappings.CODEC);
     }
 
     @Override
