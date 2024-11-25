@@ -22,7 +22,7 @@ public interface MappingsManager {
 
     static void loadModMappings(ModContainer mod, String modId) {
         var metadata = mod.getMetadata();
-        mod.findPath("assets/" + Transition.MODID + "/mappings.json").ifPresentOrElse((path) -> {
+        mod.findPath("data/" + Transition.MODID + "/mappings.json").ifPresentOrElse((path) -> {
             try (Reader reader = new BufferedReader(new InputStreamReader(path.toUri().toURL().openStream(), StandardCharsets.UTF_8))) {
                 JsonObject json = GsonHelper.fromJson(GSON, reader, JsonObject.class);
                 Mappings.CODEC.parse(JsonOps.INSTANCE, json)
