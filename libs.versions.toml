@@ -1,12 +1,12 @@
 [versions]
-kotlin = "2.0.10"
-fabric-loom = "1.7-SNAPSHOT"
+kotlin = "2.0.21"
+fabric-loom = "1.8-SNAPSHOT"
 iridium = "3.3.2"
 
 #farrow = "1.0.0+arrow.1.2.4"
-modmenu = "11.0.1"
-emi = "1.1.10+1.21"
-fzzyconfig = "0.5.0+1.21"
+modmenu = "11.0.3"
+emi = "1.1.18+1.21.1"
+fzzyconfig = "0.5.8+1.21"
 
 [libraries]
 #farrow = { module = "net.wiredtomato:farrow", version.ref = "farrow" }
