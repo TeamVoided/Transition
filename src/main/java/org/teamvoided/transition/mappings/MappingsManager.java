@@ -20,7 +20,7 @@ public interface MappingsManager {
 
     Map<String, Mappings> ACTIVE_MAPPINGS = new HashMap<>();
 
-    static void loadModMappings(ModContainer mod, String modId) {
+    static void loadModMappings(ModContainer mod, String modId, boolean hasRemapping) {
         var metadata = mod.getMetadata();
         mod.findPath("data/" + Transition.MODID + "/mappings.json").ifPresentOrElse((path) -> {
             try (Reader reader = new BufferedReader(new InputStreamReader(path.toUri().toURL().openStream(), StandardCharsets.UTF_8))) {
@@ -32,6 +32,8 @@ public interface MappingsManager {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }, () -> LOGGER.error("Failed to find mappings file for: {}", modId));
+        }, () -> {
+            if (hasRemapping) LOGGER.error("Failed to find mappings file for: {}", modId);
+        });
     }
 }
