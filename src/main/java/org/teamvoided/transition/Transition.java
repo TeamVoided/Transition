@@ -52,19 +52,19 @@ public class Transition implements ModInitializer {
             return;
         }
 
-        CacheManager.readCache();
+//        CacheManager.readCache();
         FabricLoader.getInstance().getAllMods().forEach((mod) -> {
             ModMetadata metadata = mod.getMetadata();
 /*            if (metadata.containsCustomValue("remapping")) {
                 boolean enabled = metadata.getCustomValue("remapping").getAsBoolean();
                 if (enabled) {
                     log("Mod \"%s\" has remapping enabled".formatted(metadata.getId()));*/
-            CacheManager.updateCache(metadata);
+//            CacheManager.updateCache(metadata);
             MappingsManager.loadModMappings(mod, metadata.getId());
             /*    }
             }*/
         });
-        CacheManager.writeCache();
+//        CacheManager.writeCache();
     }
 
     public static void log(String message) {
