@@ -7,6 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import org.slf4j.Logger;
@@ -39,11 +40,10 @@ public class Transition implements ModInitializer {
     public void onServerStarting(MinecraftServer server) {
         if (CONFIG.mode == MappingModes.ON_LOAD) {
             var worldFile = server.getWorldPath(LevelResource.ROOT).toFile();
-            log("Server world worldFile: %s".formatted(worldFile));
+            log("Server world world file: %s".formatted(worldFile));
             processDirectory(worldFile);
-            log("Finished processing directory");
-
-            server.stopServer();
+            log("Finished processing world file!");
+            server.getPlayerList().getPlayers().forEach((it) -> it.connection.disconnect(Component.literal("Transition end of world!")));
         }
     }
 

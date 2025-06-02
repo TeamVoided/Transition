@@ -45,7 +45,6 @@ dependencies {
 }
 
 loom {
-    splitEnvironmentSourceSets()
     runs {
         create("DataGen") {
             client()
