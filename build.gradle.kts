@@ -16,8 +16,6 @@ group = property("maven_group")!!
 version = property("mod_version")!!
 base.archivesName.set(modSettings.modId())
 
-//val modrinth_id: String? by project
-//val curse_id: String? by project
 
 repositories {
     maven("https://teamvoided.org/releases")
@@ -31,8 +29,6 @@ println("Task: " + gradle.startParameter.taskNames.joinToString(","))
 modSettings {
     entrypoint("main", "org.teamvoided.transition.Transition")
     mixinFile("${modId()}.mixins.json")
-
-//    accessWidener("${modId()}.accesswidener")
 }
 
 dependencies {

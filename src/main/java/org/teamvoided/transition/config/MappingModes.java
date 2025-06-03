@@ -1,4 +1,4 @@
-package org.teamvoided.transition.mappings;
+package org.teamvoided.transition.config;
 
 import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable;
 import org.jetbrains.annotations.NotNull;

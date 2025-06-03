@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.teamvoided.transition.Transition;
-import org.teamvoided.transition.mappings.MappingModes;
+import org.teamvoided.transition.config.MappingModes;
 import org.teamvoided.transition.mappings.MappingsManager;
 
 import static org.teamvoided.transition.Transition.MINECRAFT;

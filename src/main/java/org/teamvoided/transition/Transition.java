@@ -12,7 +12,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.teamvoided.transition.mappings.MappingModes;
+import org.teamvoided.transition.config.MappingModes;
+import org.teamvoided.transition.config.TransitionConfig;
 import org.teamvoided.transition.mappings.MappingsManager;
 
 import static org.teamvoided.transition.ServerProcessor.processDirectory;
@@ -52,13 +53,15 @@ public class Transition implements ModInitializer {
             return;
         }
 
-//        CacheManager.readCache();
+        CacheManager.readCache();
         FabricLoader.getInstance().getAllMods().forEach((mod) -> {
             ModMetadata metadata = mod.getMetadata();
-            MappingsManager.loadModMappings(mod, metadata.getId(), metadata.containsCustomValue("has_remapping"));
-//            CacheManager.updateCache(metadata);
+            if (metadata.containsCustomValue("has_remapping")){
+                MappingsManager.loadModMappings(mod, metadata.getId(), true);
+            }
+            CacheManager.updateCache(metadata);
         });
-//        CacheManager.writeCache();
+        CacheManager.writeCache();
     }
 
     public static void log(String message) {
