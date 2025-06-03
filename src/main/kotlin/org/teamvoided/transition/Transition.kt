@@ -2,7 +2,7 @@ package org.teamvoided.transition
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava.registerAndLoadConfig
+import me.fzzyhmstrs.fzzy_config.api.ConfigApi.registerAndLoadConfig
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.loader.api.FabricLoader
@@ -18,8 +18,8 @@ import org.teamvoided.transition.mappings.MappingsManager
 
 @Suppress("unused")
 object Transition : ModInitializer {
-    const val MODID: String = "org/teamvoided/transition"
-    const val MINECRAFT: String = "minecraft"
+    const val MODID = "transition"
+    const val MINECRAFT = "minecraft"
 
     val LOGGER: Logger = LoggerFactory.getLogger(MODID)
     val GSON: Gson = GsonBuilder().setPrettyPrinting().create()
@@ -48,16 +48,17 @@ object Transition : ModInitializer {
 
     fun loadMod() {
         if (CONFIG.mode == MappingModes.OFF) return
-        ModManager.readCache()
+//        ModManager.readCache()
         FabricLoader.getInstance().allMods.forEach {
             val data = it.metadata
             if (MappingsManager.loadModMappings(it, data.id, data.containsCustomValue("has_remapping"))) {
                 ModManager.addActiveMod(data)
             }
         }
-        ModManager.writeCache()
+//        ModManager.writeCache()
     }
 
+    @JvmStatic
     fun log(message: String?) = LOGGER.info("(Transition) {}", message)
     fun error(message: String?) = LOGGER.error("(Transition) {}", message)
     fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MODID, path)
