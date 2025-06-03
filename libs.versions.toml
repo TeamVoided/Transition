@@ -1,18 +1,19 @@
 [versions]
-kotlin = "2.0.21"
-fabric-loom = "1.8-SNAPSHOT"
-iridium = "3.3.2"
-
-#farrow = "1.0.0+arrow.1.2.4"
+kotlin = "2.1.20"
+fabric-loom = "1.10-SNAPSHOT"
+iridium = "3.5.0"
+# Dependencies
+fzzy-config = "0.6.9+1.21"
+# QoL
 modmenu = "11.0.3"
-emi = "1.1.18+1.21.1"
-fzzyconfig = "0.5.8+1.21"
+emi = "1.1.22+1.21.1"
 
 [libraries]
-#farrow = { module = "net.wiredtomato:farrow", version.ref = "farrow" }
+# Dependencies
+fzzy-config = { module = "me.fzzyhmstrs:fzzy_config", version.ref = "fzzy-config" }
+# QoL
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 emi = { module = "dev.emi:emi-fabric", version.ref = "emi" }
-fzzyconfig = { module = "me.fzzyhmstrs:fzzy_config", version.ref = "fzzyconfig" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

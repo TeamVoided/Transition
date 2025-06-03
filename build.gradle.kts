@@ -1,4 +1,3 @@
-@file:Suppress("PropertyName", "VariableNaming")
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -34,7 +33,7 @@ modSettings {
 dependencies {
     modImplementation(fileTree("libs"))
     modImplementation(libs.modmenu)
-    modImplementation(libs.fzzyconfig)
+    modImplementation(libs.fzzy.config)
 
     modCompileOnly("${libs.emi.get()}:api")
     modLocalRuntime(libs.emi)

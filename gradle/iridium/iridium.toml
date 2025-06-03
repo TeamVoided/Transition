@@ -1,19 +1,21 @@
 projectTitle = "Transition"
 modId = "transition"
+modVersion = "1.0.0"
+group = "org.teamvoided"
 githubRepo = "Teamvoided/Transition"
 discordServerInviteId = "KZ5Q364hEg"
 authors = [ "MincraftEnistein", "TheEnderCore" ]
-majorMinecraftVersion = "1.21"
+majorMinecraftVersion = ">=1.21"
 minecraftVersion = "1.21.1"
-fabricLoaderVersion = "0.16.9"
-fabricApiVersion = "0.106.0+1.21.1"
-fabricLangKotlinVersion = "1.12.3+kotlin.2.0.21"
+fabricLoaderVersion = "0.16.14"
+fabricApiVersion = "0.116.0+1.21.1"
+fabricLangKotlinVersion = "1.13.2+kotlin.2.1.20"
 license = "MIT"
 modules = [ ]
 modDescription = "Mod to fix broken blocks and items"
 # Modmenu badges, values can be: [ library, deprecated ]
 badges = [ ]
-disableKotlin = true
+disableKotlin = false
 
 [mappings]
     # You have 7 mapping types
