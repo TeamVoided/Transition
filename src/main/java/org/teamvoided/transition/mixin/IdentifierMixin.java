@@ -29,19 +29,16 @@ public class IdentifierMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(String oldNamespace, String oldPath, CallbackInfo ci) {
+        if (Transition.CONFIG.mode != MappingModes.CONTINUOUS) return;
         if (Transition.IS_ACTIVE && !oldNamespace.equals(MINECRAFT)) {
-            if (Transition.CONFIG.mode != MappingModes.CONTINUOUS) {
-                return;
-            }
-
             MappingsManager.ACTIVE_MAPPINGS.forEach((currentNamespace, mapping) -> {
-
-                if (!oldNamespace.equals(currentNamespace) && mapping.oldNamespaces().contains(oldNamespace)) {
+                if (!oldNamespace.equals(currentNamespace) && mapping.oldNamespaces.contains(oldNamespace)) {
                     this.namespace = currentNamespace;
                 }
 
-                if (namespace.equals(currentNamespace) && mapping.oldToNewPaths().containsKey(oldPath)) {
-                    this.path = mapping.oldToNewPaths().get(oldPath);
+                var newPath = mapping.oldToNewPaths.get(oldPath);
+                if (namespace.equals(currentNamespace) && newPath != null) {
+                    this.path = newPath;
                 }
             });
         }
